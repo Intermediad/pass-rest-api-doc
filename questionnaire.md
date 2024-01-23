@@ -102,6 +102,29 @@ Card organizaton is determined by the bearer token used for authorization.
   - **Code:** 204 <br />
     **Message:** No data found <br />
 
+- **Content definition:**
+
+| Name                                      | Type         | Optional | Additional information |
+| :---------------------------------------- | :----------- | :------- | :--------------------- |
+| _`Root`_                                  | object       |          | 
+| &nbsp;&nbsp;`number_of_items`             | Integer      |          | 0, 1 or more
+| _`Surveydefinitions`_                     | object       |          | 
+| &nbsp;&nbsp;`Surveydefinition_id`         | long         |          | Unique identifier
+| &nbsp;&nbsp;`Surveydefinition_name`       | string(100)  |          | 
+| &nbsp;&nbsp;`Description`                 | string(2000) | Yes      | 
+| &nbsp;&nbsp;`Validfrom_date`              | string(10)   |          | format 'dd-MM-yyyy'
+| &nbsp;&nbsp;`Validuntil_date`             | string(10)   |          | format 'dd-MM-yyyy'
+| &nbsp;&nbsp;`Surveyobject_type`           | enum         |          | Values: Regeling, Voorziening 
+| &nbsp;&nbsp;`Surveyobject_id`             | long         |          | Unique identifier of surveyobject
+| &nbsp;&nbsp;`Surveyobject_code`           | string(50)   |          | Unique code of surveyobject
+| &nbsp;&nbsp;`Surveyobject_name`           | string(200)  |          | Name of surveyobject
+| _`SurveySteps`_                           | object       |          | 1 or more
+| &nbsp;&nbsp;`Step_id`                     | long         |          | Unique identifier
+| &nbsp;&nbsp;`Step_number`                 | Integer      |          | 
+| &nbsp;&nbsp;`Step_name`                   | string(100)  |          | 
+| &nbsp;&nbsp;`Description`                 | string(2000) | Yes      | 
+| &nbsp;&nbsp;`Questionnaire_id`            | long         |          | Unique identification of the questionnaire to be used in the survey step
+
 - **Error Response:**
 
   - **Code:** 406 <br />
@@ -191,6 +214,29 @@ Card organizaton is determined by the bearer token used for authorization.
 
   - **Code:** 204 <br />
     **Message:** No data found <br />
+
+- **Content definition:**
+
+| Name                                      | Type         | Optional | Additional information |
+| :---------------------------------------- | :----------- | :------- | :--------------------- |
+| _`Root`_                                  | object       |          | 
+| &nbsp;&nbsp;`number_of_items`             | Integer      |          | 0 or 1
+| _`Surveydefinitions`_                     | object       |          | 
+| &nbsp;&nbsp;`Surveydefinition_id`         | long         |          | Unique identifier
+| &nbsp;&nbsp;`Surveydefinition_name`       | string(100)  |          | 
+| &nbsp;&nbsp;`Description`                 | string(2000) | Yes      | 
+| &nbsp;&nbsp;`Validfrom_date`              | string(10)   |          | format 'dd-MM-yyyy'
+| &nbsp;&nbsp;`Validuntil_date`             | string(10)   |          | format 'dd-MM-yyyy'
+| &nbsp;&nbsp;`Surveyobject_type`           | enum         |          | Values: Regeling, Voorziening 
+| &nbsp;&nbsp;`Surveyobject_id`             | long         |          | Unique identifier of surveyobject
+| &nbsp;&nbsp;`Surveyobject_code`           | string(50)   |          | Unique code of surveyobject
+| &nbsp;&nbsp;`Surveyobject_name`           | string(200)  |          | Name of surveyobject
+| _`SurveySteps`_                           | object       |          | 1 or more
+| &nbsp;&nbsp;`Step_id`                     | long         |          | Unique identifier
+| &nbsp;&nbsp;`Step_number`                 | Integer      |          | 
+| &nbsp;&nbsp;`Step_name`                   | string(100)  |          | 
+| &nbsp;&nbsp;`Description`                 | string(2000) | Yes      | 
+| &nbsp;&nbsp;`Questionnaire_id`            | long         |          | Unique identification of the questionnaire to be used in the survey step
 
 - **Error Response:**
 
@@ -308,6 +354,53 @@ Card organizaton is determined by the bearer token used for authorization.
 
   - **Code:** 204 <br />
     **Message:** No data found <br />
+
+- **Content definition:**
+
+| Name                                      | Type         | Optional | Additional information |
+| :---------------------------------------- | :----------- | :------- | :--------------------- |
+| _`Root`_                                  | object       |          | 1 questionnaire object
+| &nbsp;&nbsp;`Questionnaire_id`            | long         |          | Unique identifier
+| &nbsp;&nbsp;`Questionnaire_name`          | string(100)  |          | 
+| &nbsp;&nbsp;`Description`                 | string(2000) | Yes      | 
+| _`Questions`_                             | object       |          | 1 or more questions
+| &nbsp;&nbsp;`Question_id`                 | long         |          | Unique identifier
+| &nbsp;&nbsp;`Question`                    | string(200)  |          | 
+| &nbsp;&nbsp;`Answer_type`                 | enum         |          | Values: Open, Lov, Date, _Int, Dec, File
+| &nbsp;&nbsp;`Sort_order`                  | integer      |          | 
+| &nbsp;&nbsp;`Description`                 | string(2000) | Yes      |  
+| _`LovDefinition`_                         | object       |          | 0, 1; Only when Answertype = 'Lov'
+| &nbsp;&nbsp;`Lov_id`                      | long         |          | Unique identifier
+| &nbsp;&nbsp;`Name`                        | string(200)  |          | 
+| &nbsp;&nbsp;`Description`                 | enum         | Yes      | Values: Open, Lov, Date, _Int, Dec, File
+| &nbsp;&nbsp;`Is_boolean`                  | boolean      |          | Indicates if Lov represent a boolean value. Values: true or false
+| _`LovValue`_                              | object       |          | 1 or more; detail of LovDefinition
+| &nbsp;&nbsp;`Value_id`                    | long         |          | Unique identifier
+| &nbsp;&nbsp;`Sort_order`                  | integer      |          | 
+| &nbsp;&nbsp;`Value_key`                   | string(50)   |          | Unique Key value within Lovdefinition
+| &nbsp;&nbsp;`Value_caption`               | string(50)   |          | Value as shown to the respondent
+| &nbsp;&nbsp;`Explanation`                 | string(1000) | Yes      | 
+| _`AnswerConstraints`_                     | object       |          | Cosntraints for validating the answer to a question; 0, 1 or more; detail of Question
+| &nbsp;&nbsp;`Constraint_id`               | long         |          | Unique identifier
+| &nbsp;&nbsp;`Constraint_type`             | enum         |          | Values: Mandatory, Greater, Smaller, GreaterEqual, SmallerEqual, StringLength, Regex, DefaultValue, HasRemark
+| &nbsp;&nbsp;`Error_message`               | string(200)  |          | Message shown to respondent when constraint is violated
+| &nbsp;&nbsp;`Constraint_value_Date`       | string(10)   | Yes      | Only when Answer_type = 'Date' and Constraint_type in; Greater, Smaller, GreaterEqual, SmallerEqual, DefaultValue . Format 'dd-MM-yyyy'
+| &nbsp;&nbsp;`Constraint_value_Int`        | integer      | Yes      | Only when Answer_type = '_Int' and Constraint_type in; Greater, Smaller, GreaterEqual, SmallerEqual, DefaultValue
+| &nbsp;&nbsp;`Constraint_value_Dec`        | decimal      | Yes      | Only when Answer_type = 'Dec'  and Constraint_type in; Greater, Smaller, GreaterEqual, SmallerEqual, DefaultValue
+| &nbsp;&nbsp;`Constraint_value_Regex`      | string(200)  | Yes      | Only when Answer_type = 'Open' and Constraint_type in; Regex, DefaultValue
+| &nbsp;&nbsp;`Constraint_valuekey_Lov`     | string(50)   | Yes      | Only when Answer_type = 'Lov'  and Constraint_type in; DefaultValue
+| &nbsp;&nbsp;`Currentdate_default`         | integer      | Yes      | Only when Answer_type = 'Date' and Constraint_type in; DefaultValue 
+| _`FollowupConstraints`_                   | object       |          | Contraints that specify the condition voor a subquestionnaire; 0, 1 or more; detail of Question
+| &nbsp;&nbsp;`Constraint_id`               | long         |          | Unique identifier
+| &nbsp;&nbsp;`Constraint_type`             | enum         |          | Values: Greater, Smaller, GreaterEqual, SmallerEqual, StringLength, LovValue, Regex
+| &nbsp;&nbsp;`Error_message`               | string(200)  |          | Message shown to respondent when constraint is violated
+| &nbsp;&nbsp;`Constraint_value_Date`       | string(10)   | Yes      | Only when Answer_type = 'Date' and Constraint_type in; Greater, Smaller, GreaterEqual, SmallerEqual . Format 'dd-MM-yyyy'
+| &nbsp;&nbsp;`Constraint_value_Int`        | integer      | Yes      | Only when Answer_type = '_Int' and Constraint_type in; Greater, Smaller, GreaterEqual, SmallerEqual
+| &nbsp;&nbsp;`Constraint_value_Dec`        | decimal      | Yes      | Only when Answer_type = 'Dec'  and Constraint_type in; Greater, Smaller, GreaterEqual, SmallerEqual
+| &nbsp;&nbsp;`Constraint_value_Regex`      | string(200)  | Yes      | Only when Answer_type = 'Open' and Constraint_type in; Regex
+| &nbsp;&nbsp;`Questionnare_id`             | long         | Yes      | Unique id of (sub)questionnaire that should be activated
+| _`Constraint_LovValues`_                  | object       | Yes      | Only when Answer_type = 'Lov' and Constraint_type in; LovValue
+| &nbsp;&nbsp;`Value_key`                   | string(50)   |          | ValueKey of the Lovvalue
 
 - **Error Response:**
 
