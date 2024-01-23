@@ -3,6 +3,7 @@
 | [/questionnaire/v1/surveydefinition](#retrieve-surveydefinitions)    | `GET`  | retrieve all surveydefinitions |
 | [/questionnaire/v1/surveydefinition/:id](#retrieve-surveydefinition) | `GET`  | retrieve one surveydefinition  |
 | [/questionnaire/v1/questionnaire/:id](#retrieve-questionnaire)       | `GET`  | retrieve a questionnaire       |
+| [/questionnaire/v1/survey](#submit-survey)                           | `POST` | Submit a completed survey      |
 
 ## **Retrieve surveydefinitions**
 
@@ -399,8 +400,117 @@ Card organizaton is determined by the bearer token used for authorization.
 | &nbsp;&nbsp;`Constraint_value_Dec`        | decimal      | Yes      | Only when Answer_type = 'Dec'  and Constraint_type in; Greater, Smaller, GreaterEqual, SmallerEqual
 | &nbsp;&nbsp;`Constraint_value_Regex`      | string(200)  | Yes      | Only when Answer_type = 'Open' and Constraint_type in; Regex
 | &nbsp;&nbsp;`Questionnare_id`             | long         | Yes      | Unique id of (sub)questionnaire that should be activated
-| _`Constraint_LovValues`_                  | object       | Yes      | Only when Answer_type = 'Lov' and Constraint_type in; LovValue
+| _`Constraint_LovValues`_                  | object       | Yes      | Only when Answer_type = 'Lov' and Constraint_type in; LovValue;  1 or more
 | &nbsp;&nbsp;`Value_key`                   | string(50)   |          | ValueKey of the Lovvalue
+
+- **Error Response:**
+
+  - **Code:** 406 <br />
+      **Message:** Authorization header missing
+  - **Code:** 406 <br />
+      **Message:** Auth bearer unknown
+  - **Code:** 401 <br />
+      **Message:** Authorization header invalid
+  - **Code:** 401 <br />
+      **Message:** Token invalid or not found
+  - **Code:** 401 <br />
+      **Message:** Token expired
+  - **Code:** 401 <br />
+      **Message:** API key not authorized
+  - **Code:** 400 <br />
+      **Message:** Missing "Questionnaire_id" parameter
+
+<br />
+
+## **Submit survey**
+
+Submit a completed survey. 
+
+- **URL**
+
+  /questionnaire/v1/survey
+
+- **Method:**
+
+  `POST`
+
+- **Headers**
+
+  **Required:**
+
+  `Authorization` (type: Bearer)
+
+- **URL Params**
+
+  None
+  
+- **Data Params**
+  
+  Request-Body /JSON/:
+  
+    ```javascript
+  {
+      "SurveyDefinition_id": 123123123,
+      "Answers": [
+          {
+            "Answer_id": 366262,
+            "Answer_integer": 12,
+            "Answer_string": "Dit is het antwoord",
+            "Answer_date": "12-04-1998",
+            "Answer_decimal": 12.22,
+            "Remark": "Dit is een opmerking",
+            "Question_id": 88488393,    
+            "LovValue_id": 6773882,  
+            "AnswerFileDocument":
+                {
+                  "Contents": "binary",
+                }
+          } ],
+      "Respondent":
+          {
+            "Identification": 123123123213,
+            "First_Name": "Jan",
+            "Initials": "J.",
+            "Infix": "van",
+            "Last_name": "Gisteren",
+            "Gender": "M",
+            "Email_adress": "janvgisteren@gmail.com",
+            "Phone_number": "0614435536"
+          }  
+  }
+    ```
+
+- **Content definition:**
+
+| Name                                      | Type         | Optional | Additional information |
+| :---------------------------------------- | :----------- | :------- | :--------------------- |
+| _`Root`_                                  | object       |          | 1 questionnaire object
+| &nbsp;&nbsp;`SurveyDefinition_id`         | Long         |          | 
+| _`Answers`_                               | object       |          | 1 or more answers
+| &nbsp;&nbsp;`Answer_id`                   | long         |          | Unique identifier
+| &nbsp;&nbsp;`Answer_integer`              | integer      | Yes      | only if the answer concerns an integer value
+| &nbsp;&nbsp;`Answer_string`               | string(1000) | Yes      | only if the answer concerns a string value
+| &nbsp;&nbsp;`Answer_date`                 | string       | Yes      | only if the answer concerns a date value; format 'dd-MM-yyyy'
+| &nbsp;&nbsp;`Answer_decimal`              | decimal      | Yes      | only if the answer concerns a decimal value
+| &nbsp;&nbsp;`Remark`                      | string(1000) | Yes      | 
+| &nbsp;&nbsp;`Question_id`                 | long         |          | unique id of the question
+| &nbsp;&nbsp;`LovValue_id`                 | long         | Yes      | only if the answer concerns a lov value
+| _`AnswerFileDocument`_                    | object       |          | only if the answer concerns a file upload
+| &nbsp;&nbsp;`Contents`                    | binary       | Yes      |  
+| _`Respondent`_                            | object       |          | the person who fills out the survey
+| &nbsp;&nbsp;`Identification`              | long         | Yes      | identification id (BSN, GAN, ...)
+| &nbsp;&nbsp;`First_Name`                  | string(20)   | Yes      | 
+| &nbsp;&nbsp;`Initials`                    | string(20)   |          | 
+| &nbsp;&nbsp;`Infix`                       | string(20)   | Yes      | 
+| &nbsp;&nbsp;`Last_name`                   | string(50)   |          | 
+| &nbsp;&nbsp;`Gender`                      | enum         |          | values: M(ale), F(emale), O(ther)
+| &nbsp;&nbsp;`Email_adress`                | string(100)  |          | 
+| &nbsp;&nbsp;`Phone_number`                | string(20)   | Yes      | 
+
+- **Success Response:**
+
+  - **Code:** 200 <br />
+    **Message:** OK <br />
 
 - **Error Response:**
 
