@@ -1,9 +1,10 @@
-| URI                                                                  | Method | Returns                        |
-| -------------------------------------------------------------------- | ------ | ------------------------------ |
-| [/questionnaire/v1/surveydefinition](#retrieve-surveydefinitions)    | `GET`  | retrieve all surveydefinitions |
-| [/questionnaire/v1/surveydefinition/:id](#retrieve-surveydefinition) | `GET`  | retrieve one surveydefinition  |
-| [/questionnaire/v1/questionnaire/:id](#retrieve-questionnaire)       | `GET`  | retrieve a questionnaire       |
-| [/questionnaire/v1/survey](#submit-survey)                           | `POST` | Submit a completed survey      |
+| URI                                                                  | Method | Returns                                     |
+| -------------------------------------------------------------------- | ------ | ------------------------------              |
+| [/questionnaire/v1/surveydefinition](#retrieve-surveydefinitions)    | `GET`  | retrieve all surveydefinitions              |
+| [/questionnaire/v1/surveydefinition/:id](#retrieve-surveydefinition) | `GET`  | retrieve one surveydefinition               |
+| [/questionnaire/v1/questionnaire/:id](#retrieve-questionnaire)       | `GET`  | retrieve a questionnaire                    |
+| [/questionnaire/v1/survey](#submit-survey)                           | `POST` | Submit a completed survey                   |
+| [/questionnaire/v1/surveyfile](#submit-surveyfile)                   | `POST` | Upload a file for a question of type 'File' |
 
 ## **Retrieve surveydefinitions**
 
@@ -449,35 +450,32 @@ Submit a completed survey.
   Request-Body /JSON/:
   
     ```javascript
-  {
-      "SurveyDefinition_id": 123123123,
-      "Answers": [
-          {
-            "Answer_id": 366262,
-            "Answer_integer": 12,
-            "Answer_string": "Dit is het antwoord",
-            "Answer_date": "12-04-1998",
-            "Answer_decimal": 12.22,
-            "Remark": "Dit is een opmerking",
-            "Question_id": 88488393,    
-            "LovValue_id": 6773882,  
-            "AnswerFileDocument":
-                {
-                  "Contents": "binary",
-                }
-          } ],
-      "Respondent":
-          {
-            "Identification": 123123123213,
-            "First_Name": "Jan",
-            "Initials": "J.",
-            "Infix": "van",
-            "Last_name": "Gisteren",
-            "Gender": "M",
-            "Email_adress": "janvgisteren@gmail.com",
-            "Phone_number": "0614435536"
-          }  
-  }
+		{
+			"SurveyDefinition_id": 111111111111111,
+			"Respondent":
+			{
+				"Identification_type": "GAN",
+				"Identification": 111111111111,
+				"First_name": "Kees",
+				"Initials": "C.L.",
+				"Infix": "van",
+				"Last_name": "Kooten",
+				"Gender": "M",
+				"Email_adress": "mail@mailbox.nl",
+				"Phone_number": "0648978933"
+			},
+			"Answer": [
+			{
+				"Answer_id": 111111111111111,
+				"Question_id": 111111111111111,
+				"Answer_integer": 2,
+				"Answer_string": "Dit is het antwoord",
+				"Answer_date": "23-09-2024",
+				"Answer_decimal": 12.22,
+				"Answer_valuekey_lov": "A",   
+				"Remark": "Dit is een opmerking",
+			} ]
+		}
     ```
 
 - **Content definition:**
@@ -487,19 +485,17 @@ Submit a completed survey.
 | _`Root`_                                  | object       |          | 1 questionnaire object
 | &nbsp;&nbsp;`SurveyDefinition_id`         | Long         |          | 
 | _`Answers`_                               | object       |          | 1 or more answers
-| &nbsp;&nbsp;`Answer_id`                   | long         |          | Unique identifier
 | &nbsp;&nbsp;`Answer_integer`              | integer      | Yes      | only if the answer concerns an integer value
 | &nbsp;&nbsp;`Answer_string`               | string(1000) | Yes      | only if the answer concerns a string value
 | &nbsp;&nbsp;`Answer_date`                 | string       | Yes      | only if the answer concerns a date value; format 'dd-MM-yyyy'
 | &nbsp;&nbsp;`Answer_decimal`              | decimal      | Yes      | only if the answer concerns a decimal value
+| &nbsp;&nbsp;`Answer_valuekey_lov`         | long         | Yes      | only if the answer concerns a lov value
 | &nbsp;&nbsp;`Remark`                      | string(1000) | Yes      | 
 | &nbsp;&nbsp;`Question_id`                 | long         |          | unique id of the question
-| &nbsp;&nbsp;`LovValue_id`                 | long         | Yes      | only if the answer concerns a lov value
-| _`AnswerFileDocument`_                    | object       |          | only if the answer concerns a file upload
-| &nbsp;&nbsp;`Contents`                    | binary       | Yes      |  
 | _`Respondent`_                            | object       |          | the person who fills out the survey
-| &nbsp;&nbsp;`Identification`              | long         | Yes      | identification id (BSN, GAN, ...)
-| &nbsp;&nbsp;`First_Name`                  | string(20)   | Yes      | 
+| &nbsp;&nbsp;`Identification_type`         | enum         | Yes      | values: BSN, GAN, ...
+| &nbsp;&nbsp;`Identification`              | long         | Yes      | identificationnr for chosen type
+| &nbsp;&nbsp;`First_name`                  | string(20)   | Yes      | 
 | &nbsp;&nbsp;`Initials`                    | string(20)   |          | 
 | &nbsp;&nbsp;`Infix`                       | string(20)   | Yes      | 
 | &nbsp;&nbsp;`Last_name`                   | string(50)   |          | 
@@ -511,6 +507,10 @@ Submit a completed survey.
 
   - **Code:** 200 <br />
     **Message:** OK <br />
+
+- **Output Params**
+
+  `:survey_id`
 
 - **Error Response:**
 
@@ -528,3 +528,75 @@ Submit a completed survey.
       **Message:** API key not authorized
   - **Code:** 400 <br />
       **Message:** Missing "Questionnaire_id" parameter
+
+<br />
+
+## **Submit surveyfile**
+
+Submit a completed survey. 
+
+- **URL**
+
+  /questionnaire/v1/surveyfile
+
+- **Method:**
+
+  `POST`
+
+- **Headers**
+
+  **Required:**
+
+  `Authorization` (type: Bearer)
+  `Content_Type` 
+
+- **URL Params**
+
+  **Required:**
+
+  `:survey_id` (survey_id returned by the POST survey rest call)
+  `:question_id` (id of question the file is attached to)
+  
+- **Data Params**
+  
+  Binary object (filedocument)
+  
+- **Success Response:**
+
+  - **Code:** 200 <br />
+    **Message:** Binary content succesfully received for {survey_id} / {question_id} <br />
+
+- **Error Response:**
+
+  - **Code:** 406 <br />
+      **Message:** Authorization header missing
+  - **Code:** 406 <br />
+      **Message:** Auth bearer unknown
+  - **Code:** 401 <br />
+      **Message:** Authorization header invalid
+  - **Code:** 401 <br />
+      **Message:** Token invalid or not found
+  - **Code:** 401 <br />
+      **Message:** Token expired
+  - **Code:** 401 <br />
+      **Message:** API key not authorized
+  - **Code:** 400 <br />
+      **Message:** 'Content-Type header missing'
+  - **Code:** 400 <br />
+      **Message:** 'Content-Type {value} not allowed for document'
+  - **Code:** 400 <br />
+      **Message:** ''No binary content received''
+  - **Code:** 400 <br />
+      **Message:** 'Path parameter {survey_id} empty or missing'
+  - **Code:** 400 <br />
+      **Message:** 'Path parameter {question_id} empty or missing'
+  - **Code:** 406 <br />
+      **Message:** 'Survey for {survey_id} not found'
+  - **Code:** 406 <br />
+      **Message:** 'Survey for {survey_id} has invalid status and cannot be changed'
+  - **Code:** 406 <br />
+      **Message:** 'Answer for {survey_id} / {question_id} not found'
+  - **Code:** 406 <br />
+      **Message:** 'File for {survey_id} / {question_id} already present'
+  - **Code:** 422 <br />
+      **Message:** 'An error occurred while processing filedocument for {survey_id} / {question_id}'
