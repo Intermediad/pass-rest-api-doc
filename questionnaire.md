@@ -547,14 +547,14 @@ Submit a completed survey.
 
   **Required:**
 
-  `Authorization` (type: Bearer)
+  `Authorization` (type: Bearer) <br />
   `Content_Type` 
 
 - **URL Params**
 
   **Required:**
 
-  `:survey_id` (survey_id returned by the POST survey rest call)
+  `:survey_id` (survey_id returned by the POST survey rest call) <br />
   `:question_id` (id of question the file is attached to)
   
 - **Data Params**
