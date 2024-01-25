@@ -533,7 +533,7 @@ Submit a completed survey.
 
 ## **Submit surveyfile**
 
-Submit a completed survey. 
+Submit a filedocument attached to an answer of type 'File'.
 
 - **URL**
 
