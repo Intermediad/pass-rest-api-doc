@@ -483,8 +483,9 @@ Submit a completed survey.
 | Name                                      | Type         | Optional | Additional information |
 | :---------------------------------------- | :----------- | :------- | :--------------------- |
 | _`Root`_                                  | object       |          | 1 questionnaire object
-| &nbsp;&nbsp;`SurveyDefinition_id`         | Long         |          | 
+| &nbsp;&nbsp;`Surveydefinition_id`         | Long         |          | 
 | _`Answers`_                               | object       |          | 1 or more answers
+| &nbsp;&nbsp;`Answer_sequence`             | integer      | Yes      | Unique sequence number of the answer within the survey used for sorting and file-attachement
 | &nbsp;&nbsp;`Answer_integer`              | integer      | Yes      | only if the answer concerns an integer value
 | &nbsp;&nbsp;`Answer_string`               | string(1000) | Yes      | only if the answer concerns a string value
 | &nbsp;&nbsp;`Answer_date`                 | string       | Yes      | only if the answer concerns a date value; format 'dd-MM-yyyy'
@@ -554,8 +555,8 @@ Submit a filedocument attached to an answer of type 'File'.
 
   **Required:**
 
-  `:survey_id` (survey_id returned by the POST survey rest call) <br />
-  `:question_id` (id of question the file is attached to)
+  `:survey_id` (id of suyvey returned by the POST survey rest call) <br />
+  `:answer_sequence` (id of answer within survey the file is attached to)
   
 - **Data Params**
   
@@ -564,7 +565,7 @@ Submit a filedocument attached to an answer of type 'File'.
 - **Success Response:**
 
   - **Code:** 200 <br />
-    **Message:** Binary content succesfully received for {survey_id} / {question_id} <br />
+    **Message:** Binary content succesfully received for {survey_id} / {answer_sequence} <br />
 
 - **Error Response:**
 
@@ -589,14 +590,14 @@ Submit a filedocument attached to an answer of type 'File'.
   - **Code:** 400 <br />
       **Message:** 'Path parameter {survey_id} empty or missing'
   - **Code:** 400 <br />
-      **Message:** 'Path parameter {question_id} empty or missing'
+      **Message:** 'Path parameter {answer_sequence} empty or missing'
   - **Code:** 406 <br />
       **Message:** 'Survey for {survey_id} not found'
   - **Code:** 406 <br />
       **Message:** 'Survey for {survey_id} has invalid status and cannot be changed'
   - **Code:** 406 <br />
-      **Message:** 'Answer for {survey_id} / {question_id} not found'
+      **Message:** 'Answer for {survey_id} / {answer_sequence} not found'
   - **Code:** 406 <br />
-      **Message:** 'File for {survey_id} / {question_id} already present'
+      **Message:** 'File for {survey_id} / {answer_sequence} already present'
   - **Code:** 422 <br />
-      **Message:** 'An error occurred while processing filedocument for {survey_id} / {question_id}'
+      **Message:** 'An error occurred while processing filedocument for {survey_id} / {answer_sequence}'
