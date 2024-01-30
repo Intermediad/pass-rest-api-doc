@@ -451,7 +451,7 @@ Submit a completed survey.
   
     ```javascript
 		{
-			"SurveyDefinition_id": 111111111111111,
+			"Surveydefinition_id": 111111111111111,
 			"Respondent":
 			{
 				"Identification_type": "GAN",
@@ -466,7 +466,7 @@ Submit a completed survey.
 			},
 			"Answer": [
 			{
-				"Answer_id": 111111111111111,
+				"Answer_sequence": 111111111111111,
 				"Question_id": 111111111111111,
 				"Answer_integer": 2,
 				"Answer_string": "Dit is het antwoord",
