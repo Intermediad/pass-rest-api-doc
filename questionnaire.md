@@ -384,7 +384,7 @@ Card organizaton is determined by the bearer token used for authorization.
 | &nbsp;&nbsp;`Explanation`                 | string(1000) | Yes      | 
 | _`AnswerConstraints`_                     | object       |          | Cosntraints for validating the answer to a question; 0, 1 or more; detail of Question
 | &nbsp;&nbsp;`Constraint_id`               | long         |          | Unique identifier
-| &nbsp;&nbsp;`Constraint_type`             | enum         |          | Values: Mandatory, Greater, Smaller, GreaterEqual, SmallerEqual, StringLength, Regex, DefaultValue, HasRemark
+| &nbsp;&nbsp;`Constraint_type`             | enum         |          | Values: Mandatory, Greater, Smaller, GreaterEqual, SmallerEqual, MinStringLength, MaxStringLength, Regex, DefaultValue, HasRemark
 | &nbsp;&nbsp;`Error_message`               | string(200)  |          | Message shown to respondent when constraint is violated
 | &nbsp;&nbsp;`Constraint_value_Date`       | string(10)   | Yes      | Only when Answer_type = 'Date' and Constraint_type in; Greater, Smaller, GreaterEqual, SmallerEqual, DefaultValue . Format 'dd-MM-yyyy'
 | &nbsp;&nbsp;`Constraint_value_Int`        | integer      | Yes      | Only when Answer_type = '_Int' and Constraint_type in; Greater, Smaller, GreaterEqual, SmallerEqual, DefaultValue
@@ -394,7 +394,7 @@ Card organizaton is determined by the bearer token used for authorization.
 | &nbsp;&nbsp;`Currentdate_default`         | integer      | Yes      | Only when Answer_type = 'Date' and Constraint_type in; DefaultValue 
 | _`FollowupConstraints`_                   | object       |          | Contraints that specify the condition voor a subquestionnaire; 0, 1 or more; detail of Question
 | &nbsp;&nbsp;`Constraint_id`               | long         |          | Unique identifier
-| &nbsp;&nbsp;`Constraint_type`             | enum         |          | Values: Greater, Smaller, GreaterEqual, SmallerEqual, StringLength, LovValue, Regex
+| &nbsp;&nbsp;`Constraint_type`             | enum         |          | Values: Greater, Smaller, GreaterEqual, SmallerEqual, LovValue, Regex
 | &nbsp;&nbsp;`Error_message`               | string(200)  |          | Message shown to respondent when constraint is violated
 | &nbsp;&nbsp;`Constraint_value_Date`       | string(10)   | Yes      | Only when Answer_type = 'Date' and Constraint_type in; Greater, Smaller, GreaterEqual, SmallerEqual . Format 'dd-MM-yyyy'
 | &nbsp;&nbsp;`Constraint_value_Int`        | integer      | Yes      | Only when Answer_type = '_Int' and Constraint_type in; Greater, Smaller, GreaterEqual, SmallerEqual
