@@ -549,14 +549,15 @@ Submit a filedocument attached to an answer of type 'File'.
   **Required:**
 
   `Authorization` (type: Bearer) <br />
-  `Content_Type` 
+  `Content_Type`  (allowed: application/pdf text/plain image/jpeg image/gif image/bmp image/heic image/png image/tiff)
 
 - **URL Params**
 
   **Required:**
 
   `:survey_id` (id of suyvey returned by the POST survey rest call) <br />
-  `:answer_sequence` (id of answer within survey the file is attached to)
+  `:answer_sequence` (id of answer within survey the file is attached to) <br />
+  `:file_fullname`  (filename including extension; someFile.pdf, someFile.png, etc. > Meets regex "^[\w,\s-]+\.[A-Za-z]{3,4}$")
   
 - **Data Params**
   
